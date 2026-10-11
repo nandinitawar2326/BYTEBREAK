@@ -216,12 +216,30 @@ function getTimeForDifficulty(difficulty) {
 
 // Each mission bank is deliberately organized as 5 Rookie, 5 Hacker, then 5 Nightmare questions.
 // Exactly five questions are selected per mission; no question is reused between difficulty tiers.
+function randomizeAnswerOptions(question) {
+  // Shuffle the choices without changing the correct answer value.
+  // This randomizes whether the correct answer appears as A, B, C, or D.
+  if (!question || !Array.isArray(question.options)) return question;
+
+  return {
+    ...question,
+    options: shuffleArray(question.options),
+  };
+}
+
 function getQuestionsForDifficulty(source, difficulty, count = 5) {
   if (!Array.isArray(source) || source.length === 0) return [];
   const tierIndex = difficulty === "ROOKIE" ? 0 : difficulty === "NIGHTMARE" ? 2 : 1;
   const start = tierIndex * 5;
   const tier = source.slice(start, start + 5);
-  return shuffleArray(tier).slice(0, Math.min(count, tier.length));
+
+  // Randomize both question order and answer-choice order for each new run.
+  // The answer key remains valid because handlers compare the selected value,
+  // not its displayed position. Memory choices are arrays too, so their order
+  // is shuffled while each symbol sequence itself remains unchanged.
+  return shuffleArray(tier)
+    .slice(0, Math.min(count, tier.length))
+    .map(randomizeAnswerOptions);
 }
 
 /* =========================================
@@ -311,7 +329,49 @@ function App() {
     }
   });
 
-  const saveMissionScore = ({ missionId, missionTitle, score, correct, wrong, bestCombo }) => {
+  const [campaign, setCampaign] = useState(() => {
+    try {
+      const all = JSON.parse(localStorage.getItem("bytebreak_campaigns") || "{}");
+      return all[`${(localStorage.getItem("bytebreak_player") || "").trim().toLowerCase()}|HACKER`] || { missions: {} };
+    } catch {
+      return { missions: {} };
+    }
+  });
+
+  const campaignKey = `${(playerName || "").trim().toLowerCase()}|${difficulty}`;
+
+  useEffect(() => {
+    try {
+      const all = JSON.parse(localStorage.getItem("bytebreak_campaigns") || "{}");
+      setCampaign(all[campaignKey] || { missions: {} });
+    } catch {
+      setCampaign({ missions: {} });
+    }
+  }, [campaignKey]);
+
+  const getCampaignStats = (data = campaign) => {
+    const records = missions.map((mission) => data?.missions?.[mission.id]).filter((item) => item?.cleared);
+    const completedCount = missions.filter((mission) => data?.missions?.[mission.id]?.cleared).length;
+    const correct = records.reduce((sum, item) => sum + (item.correct || 0), 0);
+    const wrong = records.reduce((sum, item) => sum + (item.wrong || 0), 0);
+    const accuracy = correct + wrong ? Math.round((correct / (correct + wrong)) * 100) : 0;
+    return { completedCount, correct, wrong, accuracy, qualified: completedCount === 5 && accuracy >= 70 };
+  };
+
+  const resetCampaign = () => {
+    try {
+      const all = JSON.parse(localStorage.getItem("bytebreak_campaigns") || "{}");
+      delete all[campaignKey];
+      localStorage.setItem("bytebreak_campaigns", JSON.stringify(all));
+    } catch {
+      // The current session can still restart if browser storage is unavailable.
+    }
+    const fresh = { missions: {} };
+    setCampaign(fresh);
+    setScreen("missions");
+  };
+
+  const saveMissionScore = ({ missionId, missionTitle, score, correct, wrong, bestCombo, cleared = false }) => {
     const accuracy = correct + wrong === 0
       ? 0
       : Math.round((correct / (correct + wrong)) * 100);
@@ -344,6 +404,45 @@ function App() {
 
     localStorage.setItem("bytebreak_leaderboard", JSON.stringify(updatedScores));
     setLeaderboard(updatedScores);
+
+    // Persist the latest successful clear per mission, keyed by player and difficulty.
+    try {
+      const allCampaigns = JSON.parse(localStorage.getItem("bytebreak_campaigns") || "{}");
+      const existing = allCampaigns[campaignKey] || { missions: {} };
+      const previous = existing.missions?.[missionId];
+      const nextRecord = {
+        missionId,
+        missionTitle,
+        score,
+        correct,
+        wrong,
+        bestCombo,
+        cleared: Boolean(cleared),
+        updatedAt: new Date().toISOString(),
+      };
+      // A failed retry does not erase a previously cleared mission.
+      const recordToSave = cleared || !previous?.cleared ? nextRecord : previous;
+      const updatedCampaign = {
+        ...existing,
+        player: playerName.trim() || "Unknown Operator",
+        difficulty,
+        missions: { ...(existing.missions || {}), [missionId]: recordToSave },
+      };
+      allCampaigns[campaignKey] = updatedCampaign;
+      localStorage.setItem("bytebreak_campaigns", JSON.stringify(allCampaigns));
+      setCampaign(updatedCampaign);
+      return updatedCampaign;
+    } catch {
+      const fallback = {
+        ...(campaign || { missions: {} }),
+        missions: {
+          ...(campaign?.missions || {}),
+          [missionId]: { missionId, missionTitle, score, correct, wrong, bestCombo, cleared: Boolean(cleared) },
+        },
+      };
+      setCampaign(fallback);
+      return fallback;
+    }
   };
 
   /* Mission 01: Crack the Code */
@@ -601,6 +700,7 @@ function App() {
         correct: correctAnswers,
         wrong: wrongAnswers,
         bestCombo,
+        cleared: lives > 0 && questionIndex >= gameQuestions.length - 1,
       });
       playSound("complete");
       setScreen("results");
@@ -744,6 +844,7 @@ function App() {
         correct: memoryCorrect,
         wrong: memoryWrong,
         bestCombo: memoryBestCombo,
+        cleared: memoryLives > 0 && memoryRoundIndex >= activeMemoryRounds.length - 1,
       });
       playSound("complete");
       setScreen("memory-results");
@@ -810,6 +911,7 @@ function App() {
         correct: arcadeCorrect,
         wrong: arcadeWrong,
         bestCombo: arcadeBestCombo,
+        cleared: arcadeLives > 0 && arcadeIndex >= arcadeQuestions.length - 1,
       });
       playSound(selectedMission?.id === "05" && arcadeLives > 0 ? "victory" : "complete");
       setScreen("arcade-results");
@@ -1165,12 +1267,23 @@ function App() {
             <div className="mission-progress">
               <span>MISSION PROGRESS</span>
 
-              <span>0 / 5 COMPLETED</span>
+              <span>{getCampaignStats().completedCount} / 5 COMPLETED · {difficulty}</span>
 
               <div className="progress-track">
-                <div className="progress-fill" />
+                <div className="progress-fill" style={{ width: `${getCampaignStats().completedCount * 20}%` }} />
               </div>
+              <p className="campaign-accuracy-note">
+                CAMPAIGN ACCURACY: {getCampaignStats().accuracy}% · REQUIRED: 70%
+              </p>
             </div>
+
+            {getCampaignStats().qualified && (
+              <div className="briefing-warning campaign-qualified">
+                <Trophy size={20} />
+                <p><strong>CAMPAIGN QUALIFIED</strong><br />All five missions cleared with at least 70% overall accuracy.</p>
+                <button type="button" className="start-button" onClick={() => setScreen("campaign-victory")}>CLAIM FINAL RANK <ChevronRight size={18} /></button>
+              </div>
+            )}
 
             <div className="mission-grid">
               {missions.map((mission, index) => {
@@ -1190,7 +1303,7 @@ function App() {
                   >
                     <div className="mission-card-top">
                       <span className="mission-number">
-                        LAYER_{mission.id}
+                        {campaign?.missions?.[mission.id]?.cleared ? "✓ CLEARED" : `LAYER_${mission.id}`}
                       </span>
 
                       <Icon size={25} />
@@ -1943,6 +2056,39 @@ function App() {
         {/* =====================================
             LOCAL LEADERBOARD
         ===================================== */}
+
+        {screen === "campaign-victory" && (
+          <motion.section
+            key="campaign-victory"
+            className="results-section"
+            initial={{ opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <div className="results-panel">
+              <div className="results-icon"><Trophy size={48} /></div>
+              <p className="section-eyebrow">BYTEBREAK // CAMPAIGN COMPLETE</p>
+              <h1>CYBER <span className="green-text">LEGEND.</span></h1>
+              <p className="results-subtitle">
+                Operator {playerName}, all five missions are cleared and your campaign meets the qualification threshold.
+              </p>
+              <div className="final-score">
+                <span>CAMPAIGN ACCURACY</span>
+                <strong>{getCampaignStats().accuracy}%</strong>
+                <small>70% REQUIRED</small>
+              </div>
+              <div className="results-grid">
+                <div><span>MISSIONS CLEARED</span><strong>{getCampaignStats().completedCount}/5</strong></div>
+                <div><span>DIFFICULTY</span><strong>{difficulty}</strong></div>
+                <div><span>CORRECT</span><strong>{getCampaignStats().correct}</strong></div>
+                <div><span>MISTAKES</span><strong>{getCampaignStats().wrong}</strong></div>
+              </div>
+              <p className="results-subtitle">ACCESS GRANTED — CAMPAIGN PROGRESS IS SAVED IN THIS BROWSER.</p>
+              <button type="button" className="start-button" onClick={() => setScreen("missions")}>VIEW CAMPAIGN <ChevronRight size={18} /></button>
+              <button type="button" className="results-secondary-button" onClick={resetCampaign}>START NEW CAMPAIGN</button>
+            </div>
+          </motion.section>
+        )}
 
         {screen === "leaderboard" && (
           <motion.section
