@@ -81,193 +81,114 @@ const missions = [
 ========================================= */
 
 const logicQuestions = [
-  {
-    question: "Complete the sequence: 2, 6, 12, 20, 30, ?",
-    options: ["36", "40", "42", "44"],
-    answer: "42",
-    explanation:
-      "The differences are 4, 6, 8, 10, and 12. Therefore, 30 + 12 = 42.",
-  },
-  {
-    question: "If A=1, B=2, ..., Z=26, what is the value of HACK?",
-    options: ["19", "21", "23", "25"],
-    answer: "23",
-    explanation:
-      "H=8, A=1, C=3, K=11. Their sum is 8 + 1 + 3 + 11 = 23.",
-  },
-  {
-    question: "Find the missing number: 3, 9, 27, 81, ?",
-    options: ["162", "189", "243", "324"],
-    answer: "243",
-    explanation:
-      "Every number is multiplied by 3. Therefore, 81 × 3 = 243.",
-  },
-  {
-    question: "Which number does not belong: 4, 9, 16, 25, 36, 48?",
-    options: ["16", "25", "36", "48"],
-    answer: "48",
-    explanation:
-      "4, 9, 16, 25, and 36 are perfect squares. 48 is not.",
-  },
-  {
-    question: "If A=1, B=2, ..., Z=26, what is the value of BYTE?",
-    options: ["48", "52", "56", "60"],
-    answer: "52",
-    explanation:
-      "B=2, Y=25, T=20, E=5. Their sum is 2 + 25 + 20 + 5 = 52.",
-  },
-  {
-    question: "Complete the sequence: 1, 1, 2, 3, 5, 8, ?",
-    options: ["11", "12", "13", "15"],
-    answer: "13",
-    explanation:
-      "Each number is the sum of the previous two numbers: 5 + 8 = 13.",
-  },
-  {
-    question:
-      "A number doubled and increased by 6 equals 26. Find the number.",
-    options: ["8", "10", "12", "13"],
-    answer: "10",
-    explanation:
-      "2x + 6 = 26. Therefore, 2x = 20 and x = 10.",
-  },
-  {
-    question: "Find the next number: 5, 10, 20, 40, ?",
-    options: ["60", "70", "80", "100"],
-    answer: "80",
-    explanation:
-      "Every number is multiplied by 2. Therefore, 40 × 2 = 80.",
-  },
-  {
-    question: "Which is the odd one out?",
-    options: ["Triangle", "Square", "Circle", "Cube"],
-    answer: "Cube",
-    explanation:
-      "A cube is three-dimensional; the others are two-dimensional.",
-  },
-  {
-    question:
-      "If 5 machines make 5 chips in 5 minutes, how long for 10 machines to make 10 chips?",
-    options: ["2.5 minutes", "5 minutes", "10 minutes", "15 minutes"],
-    answer: "5 minutes",
-    explanation:
-      "Each machine makes one chip in five minutes. Ten machines can make ten chips simultaneously in five minutes.",
-  },
+  // ROOKIE — foundational patterns and simple reasoning (5)
+  { question: "Complete the sequence: 2, 4, 6, 8, ?", options: ["9", "10", "12", "14"], answer: "10", explanation: "The sequence increases by 2 each time." },
+  { question: "Which is the odd one out?", options: ["Triangle", "Square", "Circle", "Cube"], answer: "Cube", explanation: "A cube is three-dimensional; the others are two-dimensional shapes." },
+  { question: "If A=1, B=2, ..., Z=26, what is the value of CAT?", options: ["22", "24", "26", "28"], answer: "24", explanation: "C=3, A=1, T=20; 3 + 1 + 20 = 24." },
+  { question: "Find the next number: 5, 10, 15, 20, ?", options: ["22", "24", "25", "30"], answer: "25", explanation: "Add 5 at every step." },
+  { question: "A number plus 7 equals 15. What is the number?", options: ["6", "7", "8", "9"], answer: "8", explanation: "15 − 7 = 8." },
+  // HACKER — multi-step patterns and deductions (5)
+  { question: "Complete the sequence: 2, 6, 12, 20, 30, ?", options: ["36", "40", "42", "44"], answer: "42", explanation: "The differences are 4, 6, 8, 10, then 12." },
+  { question: "If A=1, B=2, ..., Z=26, what is the value of HACK?", options: ["19", "21", "23", "25"], answer: "23", explanation: "H=8, A=1, C=3, K=11; the sum is 23." },
+  { question: "Find the missing number: 3, 9, 27, 81, ?", options: ["162", "189", "243", "324"], answer: "243", explanation: "Multiply each number by 3." },
+  { question: "If 4 workers finish a task in 6 hours, how long would 8 workers take at the same rate?", options: ["2 hours", "3 hours", "6 hours", "12 hours"], answer: "3 hours", explanation: "Doubling the workers halves the time." },
+  { question: "Find the missing number: 2, 5, 10, 17, 26, ?", options: ["35", "36", "37", "39"], answer: "37", explanation: "Add consecutive odd numbers: +3, +5, +7, +9, then +11." },
+  // NIGHTMARE — harder deductions and less-obvious patterns (5)
+  { question: "Find the next number: 1, 2, 6, 24, 120, ?", options: ["480", "600", "720", "840"], answer: "720", explanation: "The terms are factorials: 1!, 2!, 3!, 4!, 5!, then 6! = 720." },
+  { question: "If every NEX is a VOR and no VOR is a ZIM, which must be true?", options: ["Some NEX are ZIM", "No NEX is a ZIM", "All ZIM are NEX", "All VOR are NEX"], answer: "No NEX is a ZIM", explanation: "Every NEX belongs to VOR, and VOR never overlaps ZIM." },
+  { question: "Find the missing number: 4, 7, 13, 25, 49, ?", options: ["73", "85", "97", "101"], answer: "97", explanation: "Each term is previous × 2 − 1." },
+  { question: "A three-digit code uses distinct digits. The hundreds digit is twice the tens digit, and the units digit is 3 more than the tens digit. Which code fits?", options: ["425", "243", "624", "462"], answer: "425", explanation: "The tens digit is 2, the hundreds digit is 4, and the units digit is 5, giving 425." },
+  { question: "A code is shifted forward by 2 letters (A→C, B→D). What does XENON become, wrapping after Z?", options: ["ZGPQP", "ZGPQP", "YFPOP", "ZFOQP"], answer: "ZGPQP", explanation: "Shift each letter forward two places: X→Z, E→G, N→P, O→Q, N→P." },
 ];
 
 /* =========================================
-   MISSION 02: MEMORY ROUNDS
+   MISSION 02: MEMORY ROUNDS — 5 UNIQUE SEQUENCES PER LEVEL
 ========================================= */
-
 const memoryRounds = [
-  {
-    sequence: ["◆", "●", "▲"],
-    options: [
-      ["◆", "●", "▲"],
-      ["●", "◆", "▲"],
-      ["◆", "▲", "●"],
-      ["▲", "●", "◆"],
-    ],
-  },
-  {
-    sequence: ["★", "◆", "●", "▲"],
-    options: [
-      ["★", "●", "◆", "▲"],
-      ["★", "◆", "●", "▲"],
-      ["◆", "★", "●", "▲"],
-      ["▲", "◆", "●", "★"],
-    ],
-  },
-  {
-    sequence: ["●", "▲", "★", "◆", "■"],
-    options: [
-      ["●", "▲", "◆", "★", "■"],
-      ["▲", "●", "★", "◆", "■"],
-      ["●", "▲", "★", "◆", "■"],
-      ["●", "★", "▲", "◆", "■"],
-    ],
-  },
-  {
-    sequence: ["■", "★", "▲", "●", "◆", "⬟"],
-    options: [
-      ["■", "★", "▲", "●", "◆", "⬟"],
-      ["■", "▲", "★", "●", "◆", "⬟"],
-      ["★", "■", "▲", "◆", "●", "⬟"],
-      ["■", "★", "●", "▲", "⬟", "◆"],
-    ],
-  },
-  {
-    sequence: ["⬟", "◆", "★", "●", "■", "▲", "⬢"],
-    options: [
-      ["⬟", "◆", "●", "★", "■", "▲", "⬢"],
-      ["⬟", "◆", "★", "●", "■", "▲", "⬢"],
-      ["◆", "⬟", "★", "●", "▲", "■", "⬢"],
-      ["⬟", "★", "◆", "●", "■", "⬢", "▲"],
-    ],
-  },
+  // ROOKIE: 3–4 symbols
+  { sequence: ["◆", "●", "▲"], options: [["◆", "●", "▲"], ["●", "◆", "▲"], ["◆", "▲", "●"], ["▲", "●", "◆"]] },
+  { sequence: ["★", "◆", "●", "▲"], options: [["★", "●", "◆", "▲"], ["★", "◆", "●", "▲"], ["◆", "★", "●", "▲"], ["▲", "◆", "●", "★"]] },
+  { sequence: ["■", "●", "★"], options: [["■", "●", "★"], ["●", "■", "★"], ["★", "●", "■"], ["■", "★", "●"]] },
+  { sequence: ["▲", "⬟", "◆", "●"], options: [["▲", "⬟", "◆", "●"], ["⬟", "▲", "◆", "●"], ["▲", "◆", "⬟", "●"], ["●", "⬟", "◆", "▲"]] },
+  { sequence: ["✦", "■", "●"], options: [["✦", "■", "●"], ["■", "✦", "●"], ["✦", "●", "■"], ["●", "■", "✦"]] },
+  // HACKER: 5–6 symbols
+  { sequence: ["●", "▲", "★", "◆", "■"], options: [["●", "▲", "◆", "★", "■"], ["▲", "●", "★", "◆", "■"], ["●", "▲", "★", "◆", "■"], ["●", "★", "▲", "◆", "■"]] },
+  { sequence: ["■", "★", "▲", "●", "◆", "⬟"], options: [["■", "★", "▲", "●", "◆", "⬟"], ["■", "▲", "★", "●", "◆", "⬟"], ["★", "■", "▲", "◆", "●", "⬟"], ["■", "★", "●", "▲", "⬟", "◆"]] },
+  { sequence: ["★", "⬟", "●", "■", "▲"], options: [["★", "⬟", "●", "■", "▲"], ["★", "●", "⬟", "■", "▲"], ["⬟", "★", "●", "▲", "■"], ["★", "⬟", "■", "●", "▲"]] },
+  { sequence: ["⬢", "●", "★", "▲", "◆", "■"], options: [["⬢", "●", "★", "▲", "◆", "■"], ["⬢", "★", "●", "▲", "◆", "■"], ["●", "⬢", "★", "◆", "▲", "■"], ["⬢", "●", "▲", "★", "■", "◆"]] },
+  { sequence: ["◆", "⬟", "■", "★", "●", "⬢"], options: [["◆", "⬟", "■", "★", "●", "⬢"], ["◆", "■", "⬟", "★", "●", "⬢"], ["⬟", "◆", "■", "●", "★", "⬢"], ["◆", "⬟", "★", "■", "●", "⬢"]] },
+  // NIGHTMARE: 7–9 symbols
+  { sequence: ["⬟", "◆", "★", "●", "■", "▲", "⬢"], options: [["⬟", "◆", "★", "●", "■", "▲", "⬢"], ["⬟", "◆", "●", "★", "■", "▲", "⬢"], ["◆", "⬟", "★", "●", "▲", "■", "⬢"], ["⬟", "★", "◆", "●", "■", "⬢", "▲"]] },
+  { sequence: ["◆", "⬟", "■", "★", "●", "⬢", "▲", "✦"], options: [["◆", "⬟", "■", "★", "●", "⬢", "▲", "✦"], ["◆", "■", "⬟", "★", "●", "⬢", "▲", "✦"], ["⬟", "◆", "■", "●", "★", "⬢", "✦", "▲"], ["◆", "⬟", "★", "■", "●", "▲", "⬢", "✦"]] },
+  { sequence: ["●", "✦", "▲", "⬢", "★", "⬟", "◆", "■"], options: [["●", "✦", "▲", "⬢", "★", "⬟", "◆", "■"], ["●", "▲", "✦", "⬢", "★", "⬟", "◆", "■"], ["✦", "●", "▲", "★", "⬢", "⬟", "■", "◆"], ["●", "✦", "⬢", "▲", "⬟", "★", "◆", "■"]] },
+  { sequence: ["⬟", "★", "◆", "●", "✦", "■", "▲", "⬢", "●"], options: [["⬟", "★", "◆", "●", "✦", "■", "▲", "⬢", "●"], ["⬟", "◆", "★", "●", "✦", "■", "▲", "⬢", "●"], ["★", "⬟", "◆", "✦", "●", "■", "⬢", "▲", "●"], ["⬟", "★", "●", "◆", "✦", "▲", "■", "⬢", "●"]] },
+  { sequence: ["✦", "⬢", "▲", "◆", "●", "★", "■", "⬟"], options: [["✦", "⬢", "▲", "◆", "●", "★", "■", "⬟"], ["✦", "▲", "⬢", "◆", "●", "★", "■", "⬟"], ["⬢", "✦", "▲", "●", "◆", "★", "⬟", "■"], ["✦", "⬢", "◆", "▲", "★", "●", "■", "⬟"]] },
 ];
 
 /* =========================================
-   MISSIONS 03–05: CHALLENGE DATA
+   MISSIONS 03–05: CHALLENGE DATA — 5 PER LEVEL
 ========================================= */
-
 const debugQuestions = [
-  {
-    title: "FIX THE LOOP",
-    question: "The loop should print numbers from 1 to 5. What should change?",
-    code: "for (let i = 1; i < 5; i++) {\n  console.log(i);\n}",
-    options: ["Change i < 5 to i <= 5", "Change let to const", "Remove i++", "Start i at 0"],
-    answer: "Change i < 5 to i <= 5",
-    explanation: "Using i <= 5 includes 5 in the output. The original condition stops before 5.",
-  },
-  {
-    title: "REPAIR THE FUNCTION",
-    question: "The function should return the sum. Which fix is correct?",
-    code: "function add(a, b) {\n  console.log(a + b);\n}\nconst result = add(4, 6);",
-    options: ["Replace console.log with return", "Remove both parameters", "Change + to -", "Delete the function"],
-    answer: "Replace console.log with return",
-    explanation: "return sends the value back to the caller; console.log only displays it.",
-  },
-  {
-    title: "FIX THE CONDITION",
-    question: "Access should be granted only when isLoggedIn is true.",
-    code: "if (isLoggedIn = true) {\n  console.log('Access granted');\n}",
-    options: ["Use === instead of =", "Remove the if", "Change true to null", "Rename console"],
-    answer: "Use === instead of =",
-    explanation: "A single equals sign assigns a value. Triple equals checks equality.",
-  },
-  {
-    title: "ARRAY ACCESS",
-    question: "Which change prints the first item, React?",
-    code: 'const tools = ["React", "Vite", "Node"];\nconsole.log(tools[1]);',
-    options: ["Change tools[1] to tools[0]", "Use tools[3]", "Remove the brackets", "Rename tools to tool"],
-    answer: "Change tools[1] to tools[0]",
-    explanation: "JavaScript arrays use zero-based indexing, so the first item is at index 0.",
-  },
-  {
-    title: "FIX THE COMPARISON",
-    question: "Which operator checks whether age is at least 18?",
-    code: "if (age > 18) {\n  console.log('Eligible');\n}",
-    options: ["Change > to >=", "Change > to =", "Remove age", "Change if to for"],
-    answer: "Change > to >=",
-    explanation: "The >= operator includes 18 as well as every value greater than 18.",
-  },
+  // ROOKIE
+  { title: "FIX THE LOOP", question: "The loop should print numbers from 1 to 5. What should change?", code: "for (let i = 1; i < 5; i++) {\n  console.log(i);\n}", options: ["Change i < 5 to i <= 5", "Change let to const", "Remove i++", "Start i at 0"], answer: "Change i < 5 to i <= 5", explanation: "The <= condition includes 5 in the output." },
+  { title: "RETURN THE SUM", question: "The function should give its result back to the caller. Which fix is correct?", code: "function add(a, b) {\n  console.log(a + b);\n}", options: ["Replace console.log with return", "Remove both parameters", "Change + to -", "Delete the function"], answer: "Replace console.log with return", explanation: "return sends a value back to the caller." },
+  { title: "ARRAY START", question: "Which index accesses the first item in a JavaScript array?", code: 'const tools = ["React", "Vite", "Node"];', options: ["tools[0]", "tools[1]", "tools[2]", "tools[3]"], answer: "tools[0]", explanation: "JavaScript arrays are zero-indexed." },
+  { title: "STRING VALUE", question: "Which value is a string?", code: "const count = 7;", options: ['"hello"', "7", "true", "null"], answer: '"hello"', explanation: "Text enclosed in quotes is a string." },
+  { title: "CONDITION CHECK", question: "Which keyword begins a conditional branch?", code: "___ (score > 10) { unlock(); }", options: ["if", "for", "function", "return"], answer: "if", explanation: "if runs a block when its condition is truthy." },
+  // HACKER
+  { title: "FIX THE CONDITION", question: "Access should be granted only when isLoggedIn is true. Which change avoids assignment?", code: "if (isLoggedIn = true) { grantAccess(); }", options: ["Use === instead of =", "Remove the if", "Change true to null", "Rename grantAccess"], answer: "Use === instead of =", explanation: "=== compares values; = assigns a value." },
+  { title: "FIX THE ARRAY LOOP", question: "What prevents this loop from reading one position past the array?", code: "for (let i = 0; i <= items.length; i++) { console.log(items[i]); }", options: ["Change <= to <", "Change i++ to i--", "Remove items", "Change length to 0"], answer: "Change <= to <", explanation: "The last valid index is length − 1." },
+  { title: "STRICT TYPE", question: "Which expression checks that input is the number 5, not the string \"5\"?", code: 'const input = "5";', options: ["input === 5", "input = 5", "input == 5", "input++ = 5"], answer: "input === 5", explanation: "Strict equality compares both type and value." },
+  { title: "OBJECT PROPERTY", question: "How do you read the user's email property?", code: 'const user = { name: "Mira", email: "mira@example.com" };', options: ["user.email", "user->email", "user(email)", "user.email()"], answer: "user.email", explanation: "Dot notation reads an object's property." },
+  { title: "TEMPLATE LITERAL", question: "Which syntax inserts name into a greeting?", code: 'const name = "Alex";', options: ['`Hello, ${name}`', '"Hello, ${name}"', '"Hello, name"', "Hello + $name"], answer: '`Hello, ${name}`', explanation: "Template literals use backticks and ${expression}." },
+  // NIGHTMARE
+  { title: "ASYNC BUG", question: "fetchUser returns a Promise. What lets you read the resolved user inside this function?", code: "function load() {\n  const user = fetchUser();\n  render(user.name);\n}", options: ["Use await fetchUser() inside an async function", "Add JSON.stringify only", "Change const to let", "Use setTimeout without waiting"], answer: "Use await fetchUser() inside an async function", explanation: "await pauses the async function until the Promise settles." },
+  { title: "CLOSURE STATE", question: "What does makeCounter return?", code: "function makeCounter() { let n = 0; return () => ++n; }", options: ["A function that increments retained n", "Always the number 0", "An array of numbers", "A Promise"], answer: "A function that increments retained n", explanation: "The returned closure retains access to n." },
+  { title: "MUTATION TRAP", question: "Which creates a shallow copy of an array before adding an item?", code: "const next = ???; next.push('x');", options: ["[...items]", "items", "items.length", "items.push('x')"], answer: "[...items]", explanation: "The spread syntax creates a new array containing the existing elements." },
+  { title: "OPERATOR PRECEDENCE", question: "What is the value of result?", code: "const result = 2 + 3 * 4 ** 2;", options: ["50", "80", "400", "100"], answer: "50", explanation: "Exponentiation first: 4²=16, then 3×16=48, then +2=50." },
+  { title: "SAFE PROPERTY ACCESS", question: "Which expression safely reads profile.name if profile may be null?", code: "const name = ???;", options: ["profile?.name", "profile.name?", "profile!name", "profile::name"], answer: "profile?.name", explanation: "Optional chaining returns undefined instead of throwing when profile is nullish." },
 ];
 
 const reflexQuestions = [
-  { title: "TARGET LOCK", question: "Select the shield symbol. Ignore the decoys.", target: "🛡️", options: ["⚡", "🛡️", "💀", "🔒"], answer: "🛡️", explanation: "Target acquired. Shield symbols represent the protected system." },
-  { title: "THREAT SCAN", question: "Select the warning symbol.", target: "⚠️", options: ["🔑", "💾", "⚠️", "🧠"], answer: "⚠️", explanation: "Warning symbol identified. Keep scanning quickly." },
-  { title: "ACCESS KEY", question: "Select the key symbol.", target: "🔑", options: ["🧩", "🔑", "⚡", "🛡️"], answer: "🔑", explanation: "Correct. The access key has been secured." },
-  { title: "ENERGY PULSE", question: "Select the lightning symbol.", target: "⚡", options: ["🔒", "💀", "⚡", "🔑"], answer: "⚡", explanation: "Correct. Energy pulse matched." },
-  { title: "LOCKDOWN", question: "Select the lock symbol.", target: "🔒", options: ["🧠", "⚠️", "🛡️", "🔒"], answer: "🔒", explanation: "Correct. The lock symbol is secured." },
+  // ROOKIE
+  { title: "TARGET LOCK", question: "Select the shield symbol.", target: "🛡️", options: ["⚡", "🛡️", "💀", "🔒"], answer: "🛡️", explanation: "Shield target acquired." },
+  { title: "ACCESS KEY", question: "Select the key symbol.", target: "🔑", options: ["🧩", "🔑", "⚡", "🛡️"], answer: "🔑", explanation: "Access key secured." },
+  { title: "ENERGY PULSE", question: "Select the lightning symbol.", target: "⚡", options: ["🔒", "💀", "⚡", "🔑"], answer: "⚡", explanation: "Energy pulse matched." },
+  { title: "LOCKDOWN", question: "Select the lock symbol.", target: "🔒", options: ["🧠", "⚠️", "🛡️", "🔒"], answer: "🔒", explanation: "Lock symbol secured." },
+  { title: "DATA CHIP", question: "Select the storage symbol.", target: "💾", options: ["💾", "🛡️", "💀", "🧩"], answer: "💾", explanation: "Storage symbol matched." },
+  // HACKER
+  { title: "THREAT SCAN", question: "Select the warning symbol and ignore decoys.", target: "⚠️", options: ["🔑", "💾", "⚠️", "🧠"], answer: "⚠️", explanation: "Warning symbol identified." },
+  { title: "NEURAL LINK", question: "Select the brain symbol.", target: "🧠", options: ["🔑", "⚠️", "🧠", "🔒"], answer: "🧠", explanation: "Neural link established." },
+  { title: "ENCRYPTION", question: "Select the lock symbol among four similar security icons.", target: "🔒", options: ["⚡", "🔒", "💾", "🧠"], answer: "🔒", explanation: "Encryption lock secured." },
+  { title: "SIGNAL TRACE", question: "Select the satellite symbol.", target: "📡", options: ["📡", "🔋", "🧬", "🧲"], answer: "📡", explanation: "Signal trace matched." },
+  { title: "DATABASE PING", question: "Select the database symbol.", target: "🗄️", options: ["🧰", "🗄️", "🛰️", "🧪"], answer: "🗄️", explanation: "Database target acquired." },
+  // NIGHTMARE
+  { title: "DECOY MATRIX", question: "Select the red warning beacon, not the yellow warning sign.", target: "🚨", options: ["⚠️", "🚨", "🔴", "🛑"], answer: "🚨", explanation: "The beacon, not the warning sign, was the target." },
+  { title: "CRYPTO SIGNAL", question: "Select the crystal ball, avoiding the lens and eye.", target: "🔮", options: ["👁️", "🔍", "🔮", "💎"], answer: "🔮", explanation: "Correct symbol selected under visual interference." },
+  { title: "SYSTEM CORE", question: "Select the atom symbol, not the gear or chip.", target: "⚛️", options: ["⚙️", "💽", "⚛️", "🧿"], answer: "⚛️", explanation: "System core identified." },
+  { title: "BIOLOCK", question: "Select the DNA symbol from the decoys.", target: "🧬", options: ["🪢", "🧵", "🧬", "🪡"], answer: "🧬", explanation: "DNA target acquired." },
+  { title: "FINAL TARGET", question: "Select the magnet, not the horseshoe-like decoys.", target: "🧲", options: ["🪝", "🧲", "🧷", "🪃"], answer: "🧲", explanation: "Final target acquired." },
 ];
 
 const finalQuestions = [
-  { title: "BOSS LOGIC", question: "Complete the sequence: 3, 6, 12, 24, ?", options: ["36", "42", "48", "54"], answer: "48", explanation: "Each number doubles: 24 × 2 = 48." },
-  { title: "BOSS DEBUG", question: "Which fix makes the function send its result back?", code: "function square(n) {\n  console.log(n * n);\n}", options: ["Use return n * n", "Rename n", "Remove the function", "Change * to +"], answer: "Use return n * n", explanation: "The return statement gives the calculated value back to the caller." },
-  { title: "BOSS REFLEX", question: "Firewall scan: choose the shield symbol.", options: ["💀", "⚡", "🛡️", "🔑"], answer: "🛡️", explanation: "Correct target selected. Firewall layer weakened." },
-  { title: "BOSS LOGIC", question: "If A=1, B=2, ..., Z=26, what is the value of BYTE?", options: ["48", "52", "56", "60"], answer: "52", explanation: "B=2, Y=25, T=20, E=5. The total is 52." },
-  { title: "FINAL DEBUG", question: "Which operator checks equality without type conversion?", code: "if (value ___ 10) {\n  unlock();\n}", options: ["===", "=", "++", "=>"], answer: "===", explanation: "Triple equals checks strict equality without type conversion." },
+  // ROOKIE
+  { title: "BOSS LOGIC", question: "Complete the sequence: 2, 4, 6, ?", options: ["7", "8", "10", "12"], answer: "8", explanation: "Add 2 each time." },
+  { title: "BOSS DEBUG", question: "Which keyword sends a value back from a function?", code: "function getScore() { ___ 10; }", options: ["return", "console", "break", "const"], answer: "return", explanation: "return provides the function's result." },
+  { title: "BOSS REFLEX", question: "Choose the shield symbol.", options: ["💀", "⚡", "🛡️", "🔑"], answer: "🛡️", explanation: "Correct target selected." },
+  { title: "BOSS SECURITY", question: "Which protocol is the secure version of HTTP for web traffic?", options: ["HTTPS", "FTP", "Telnet", "SMTP"], answer: "HTTPS", explanation: "HTTPS uses TLS to encrypt web traffic." },
+  { title: "BOSS MEMORY", question: "Which sequence exactly matches: ▲ ● ◆?", options: ["▲ ● ◆", "● ▲ ◆", "▲ ◆ ●", "◆ ● ▲"], answer: "▲ ● ◆", explanation: "The order must remain triangle, circle, diamond." },
+  // HACKER
+  { title: "BOSS LOGIC", question: "Complete the sequence: 3, 6, 12, 24, ?", options: ["36", "42", "48", "54"], answer: "48", explanation: "Each number doubles." },
+  { title: "BOSS DEBUG", question: "Which fix makes the function send its result back?", code: "function square(n) { console.log(n * n); }", options: ["Use return n * n", "Rename n", "Remove the function", "Change * to +"], answer: "Use return n * n", explanation: "return gives the calculated value back to the caller." },
+  { title: "BOSS LOGIC", question: "If A=1, B=2, ..., Z=26, what is BYTE?", options: ["48", "52", "56", "60"], answer: "52", explanation: "B=2, Y=25, T=20, E=5; total 52." },
+  { title: "FINAL DEBUG", question: "Which operator checks equality without type conversion?", code: "if (value ___ 10) { unlock(); }", options: ["===", "=", "++", "=>"], answer: "===", explanation: "Triple equals performs strict equality." },
+  { title: "BOSS SECURITY", question: "Which is the strongest example of a password?", options: ["password123", "qwerty", "T7!qP9#vL2", "12345678"], answer: "T7!qP9#vL2", explanation: "A long, unique password with mixed character types is harder to guess. Do not reuse demo passwords." },
+  // NIGHTMARE
+  { title: "BOSS LOGIC", question: "Find the next number: 1, 2, 6, 24, 120, ?", options: ["480", "600", "720", "840"], answer: "720", explanation: "These are factorials; 6! = 720." },
+  { title: "BOSS DEBUG", question: "Which declaration permits reassignment and is block-scoped?", code: "___ score = 0; score = score + 10;", options: ["let", "const", "return", "class"], answer: "let", explanation: "let declares a block-scoped variable that can be reassigned." },
+  { title: "BOSS SECURITY", question: "Which practice best reduces SQL injection risk?", options: ["Parameterized queries", "Concatenate user input into SQL", "Hide the submit button", "Use a longer table name"], answer: "Parameterized queries", explanation: "Parameters separate user-supplied data from SQL instructions." },
+  { title: "BOSS LOGIC", question: "A fair coin is flipped twice. What is the probability of getting two heads?", options: ["1/2", "1/3", "1/4", "3/4"], answer: "1/4", explanation: "The equally likely outcomes are HH, HT, TH, TT; one of four is HH." },
+  { title: "BOSS WEB", question: "Which security property does a digital signature primarily help verify?", options: ["Authenticity and integrity", "Unlimited bandwidth", "Data compression", "Screen resolution"], answer: "Authenticity and integrity", explanation: "Digital signatures help verify who signed data and whether it was altered." },
 ];
 
 /* =========================================
@@ -291,6 +212,16 @@ function getTimeForDifficulty(difficulty) {
   if (difficulty === "NIGHTMARE") return 8;
 
   return 12;
+}
+
+// Each mission bank is deliberately organized as 5 Rookie, 5 Hacker, then 5 Nightmare questions.
+// Exactly five questions are selected per mission; no question is reused between difficulty tiers.
+function getQuestionsForDifficulty(source, difficulty, count = 5) {
+  if (!Array.isArray(source) || source.length === 0) return [];
+  const tierIndex = difficulty === "ROOKIE" ? 0 : difficulty === "NIGHTMARE" ? 2 : 1;
+  const start = tierIndex * 5;
+  const tier = source.slice(start, start + 5);
+  return shuffleArray(tier).slice(0, Math.min(count, tier.length));
 }
 
 /* =========================================
@@ -441,6 +372,8 @@ function App() {
 
   const [memoryRoundIndex, setMemoryRoundIndex] = useState(0);
 
+  const [activeMemoryRounds, setActiveMemoryRounds] = useState(memoryRounds);
+
   const [memoryScore, setMemoryScore] = useState(0);
 
   const [memoryLives, setMemoryLives] = useState(3);
@@ -476,9 +409,9 @@ function App() {
   ========================================= */
 
   const startCodeMission = () => {
-    const shuffledQuestions = shuffleArray(logicQuestions);
+    const levelQuestions = getQuestionsForDifficulty(logicQuestions, difficulty, 5);
 
-    setGameQuestions(shuffledQuestions.slice(0, 5));
+    setGameQuestions(levelQuestions);
 
     setQuestionIndex(0);
 
@@ -507,6 +440,7 @@ function App() {
   ========================================= */
 
   const startMemoryMission = () => {
+    setActiveMemoryRounds(getQuestionsForDifficulty(memoryRounds, difficulty, 5));
     setMemoryRoundIndex(0);
 
     setMemoryScore(0);
@@ -533,7 +467,7 @@ function App() {
 
   const startArcadeMission = (missionId) => {
     const source = missionId === "03" ? debugQuestions : missionId === "04" ? reflexQuestions : finalQuestions;
-    setArcadeQuestions(shuffleArray(source));
+    setArcadeQuestions(getQuestionsForDifficulty(source, difficulty, 5));
     setArcadeIndex(0);
     setArcadeScore(0);
     setArcadeLives(3);
@@ -690,7 +624,7 @@ function App() {
       return;
     }
 
-    const currentRound = memoryRounds[memoryRoundIndex];
+    const currentRound = activeMemoryRounds[memoryRoundIndex];
 
     if (!currentRound) return;
 
@@ -801,7 +735,7 @@ function App() {
   const continueMemoryGame = () => {
     if (
       memoryLives <= 0 ||
-      memoryRoundIndex >= memoryRounds.length - 1
+      memoryRoundIndex >= activeMemoryRounds.length - 1
     ) {
       saveMissionScore({
         missionId: "02",
@@ -1676,7 +1610,7 @@ function App() {
                 <span>MEMORY SEQUENCE</span>
 
                 <span>
-                  ROUND {memoryRoundIndex + 1} / {memoryRounds.length}
+                  ROUND {memoryRoundIndex + 1} / {activeMemoryRounds.length}
                 </span>
               </div>
 
@@ -1733,7 +1667,7 @@ function App() {
                     </p>
 
                     <div className="memory-symbols">
-                      {memoryRounds[memoryRoundIndex].sequence.map(
+                      {activeMemoryRounds[memoryRoundIndex].sequence.map(
                         (symbol, index) => (
                           <motion.span
                             key={`${symbol}-${index}`}
@@ -1767,7 +1701,7 @@ function App() {
                     </p>
 
                     <div className="memory-options">
-                      {memoryRounds[memoryRoundIndex].options.map(
+                      {activeMemoryRounds[memoryRoundIndex].options.map(
                         (option, index) => (
                           <button
                             key={`${memoryRoundIndex}-${index}`}
@@ -1813,7 +1747,7 @@ function App() {
 
                     <p>
                       Correct sequence:{" "}
-                      {memoryRounds[memoryRoundIndex].sequence.join(" ")}
+                      {activeMemoryRounds[memoryRoundIndex].sequence.join(" ")}
                     </p>
 
                     {memoryFeedback === "correct" &&
@@ -1829,7 +1763,7 @@ function App() {
                       onClick={continueMemoryGame}
                     >
                       {memoryLives <= 0 ||
-                      memoryRoundIndex >= memoryRounds.length - 1
+                      memoryRoundIndex >= activeMemoryRounds.length - 1
                         ? "VIEW MISSION RESULTS"
                         : "NEXT MEMORY FRAGMENT"}
 
